@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopEasy Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body{background:#f3f4f6;color:#111}
+header{display:flex;justify-content:space-between;align-items:center;padding:15px 30px;background:#111;color:#fff;gap:15px}
+.logo{font-size:22px;font-weight:600}
+nav a{color:#fff;margin-left:20px;text-decoration:none}
+.cart-btn{background:#f59e0b;color:#000;padding:8px 15px;border-radius:5px;cursor:pointer}
+.search-box{padding:8px 12px;border-radius:5px;border:none;width:250px}
+.hero{background:#111;color:#fff;text-align:center;padding:50px}
+.section{padding:40px 20px}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.product{background:#fff;padding:15px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
+.product img{width:100%;border-radius:10px}
+.btn{background:#111;color:#fff;padding:10px;border:none;border-radius:5px;cursor:pointer;width:100%}
+.cart{position:fixed;right:-350px;top:0;width:300px;height:100vh;background:#fff;padding:20px;box-shadow:-5px 0 15px rgba(0,0,0,0.2);overflow:auto;transition:0.3s}
+.cart.active{right:0}
+.cart h3{text-align:center}
+.cart ul{list-style:none;margin:10px 0}
+.checkout{margin-top:20px}
+form input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:5px}
+footer{background:#111;color:#fff;text-align:center;padding:20px;margin-top:40px}
+</style>
+</head>
+
+<body>
+<header>
+<div class="logo">🛒 ShopEasy</div>
+<input type="text" class="search-box" placeholder="Search products..." onkeyup="searchProducts(this.value)">
+<nav>
+<a href="#">Home</a>
+<a href="#products">Products</a>
+<span class="cart-btn" onclick="toggleCart()">Cart 🛒</span>
+</nav>
+</header>
+
+<section class="hero">
+<h1>Amazon Style Store</h1>
+<p>Professional eCommerce for small businesses</p>
+</section>
+
+<section class="section" id="products">
+<h2>Products</h2>
+<div class="products" id="productList">
+
+<div class="product" data-name="shoes">
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80" alt="Running Shoes">
+<h3>Shoes</h3>
+<p>₹1499</p>
+<button class="btn" onclick="addToCart('Shoes',1499)">Add to Cart</button>
+</div>
+
+<div class="product" data-name="smart watch">
+<img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80" alt="Smart Watch">
+<h3>Smart Watch</h3>
+<p>₹1999</p>
+<button class="btn" onclick="addToCart('Smart Watch',1999)">Add to Cart</button>
+</div>
+
+<div class="product" data-name="headphones">
+<img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80" alt="Headphones">
+<h3>Headphones</h3>
+<p>₹999</p>
+<button class="btn" onclick="addToCart('Headphones',999)">Add to Cart</button>
+</div>
+
+</div>
+</section>
+
+<div class="cart" id="cart">
+<button onclick="toggleCart()" style="background:#f59e0b;border:none;padding:8px 12px;border-radius:5px;cursor:pointer;margin-bottom:10px;">⬅ Back</button>
+<h3>Your Cart</h3>
+<ul id="cartItems"></ul>
+<h4 id="total"></h4>
+
+<div class="checkout">
+<h3>Checkout</h3>
+<form onsubmit="placeOrder(event)">
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="tel" id="phone" placeholder="Mobile Number" required>
+<input type="text" id="address" placeholder="Address" required>
+<button class="btn">Place Order</button>
+</form>
+</div>
+</div>
+
+<footer>
+<p>© 2026 ShopEasy Store | All Rights Reserved</p>
+</footer>
+
+<script>
+let cart=[];
+
+function toggleCart(){
+ document.getElementById('cart').classList.toggle('active');
+}
+
+function addToCart(name,price){
+cart.push({name,price});
+renderCart();
+}
+
+function renderCart(){
+let list=document.getElementById('cartItems');
+let total=0;
+list.innerHTML='';
+cart.forEach(item=>{
+let li=document.createElement('li');
+li.innerText=`${item.name} - ₹${item.price}`;
+list.appendChild(li);
+ total+=item.price;
+});
+document.getElementById('total').innerText="Total: ₹"+total;
+}
+
+function placeOrder(e){
+e.preventDefault();
+let name=document.getElementById('name').value;
+let phone=document.getElementById('phone').value;
+let address=document.getElementById('address').value;
+
+alert(`Order Placed!\nName: ${name}\nPhone: ${phone}`);
+
+cart=[];
+renderCart();
+e.target.reset();
+}
+
+function searchProducts(query){
+query=query.toLowerCase();
+let products=document.querySelectorAll('.product');
+products.forEach(p=>{
+let name=p.getAttribute('data-name');
+p.style.display=name.includes(query)?'block':'none';
+});
+}
+</script>
+
+</body>
+</html>
